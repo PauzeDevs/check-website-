@@ -22,12 +22,23 @@ if(canvas&&host){
   function frameCamera(){
    const aspect=host.clientWidth/Math.max(1,host.clientHeight),tall=aspect<.82;
    camera.aspect=aspect;camera.fov=tall?72:42;
-   camera.position.set(tall?0:-2.8,tall?5:4.5,tall?20:14);
-   camera.lookAt(tall?0:-2.7,tall?2.6:2,tall?-3.6:-2);
+   camera.position.set(tall?0:-2.8,tall?5.2:4.5,tall?18:14);
+   camera.lookAt(tall?0:-2.7,tall?3.35:2,tall?-3.6:-2);
    camera.updateProjectionMatrix();
   }
   frameCamera();
   scene.add(new THREE.HemisphereLight(0x9ac9ed,0x10121b,1.2));
+  // A soft moon gives the background a readable night-sky anchor on tall screens.
+  const moonGlow=new THREE.Mesh(
+   new THREE.SphereGeometry(1.4,24,24),
+   new THREE.MeshBasicMaterial({color:0x7caee8,transparent:true,opacity:.08,side:THREE.BackSide,depthWrite:false})
+  );
+  moonGlow.position.set(5.2,9.3,-27);scene.add(moonGlow);
+  const moonDisc=new THREE.Mesh(
+   new THREE.SphereGeometry(.72,28,28),
+   new THREE.MeshBasicMaterial({color:0xc5ddff})
+  );
+  moonDisc.position.copy(moonGlow.position);scene.add(moonDisc);
   const moon=new THREE.DirectionalLight(0x91c9ff,2);moon.position.set(-5,10,4);scene.add(moon);
   const material=(color,roughness=.8)=>new THREE.MeshStandardMaterial({color,roughness});
   const wood=material(0x171b24),roof=material(0x111b29,.65),trim=material(0x363b4b),stone=material(0x202a35);
@@ -83,7 +94,7 @@ if(canvas&&host){
   addEventListener('resize',resize,{passive:true});new ResizeObserver(resize).observe(host);
   const clock=new THREE.Clock();let frame=0,paused=false;
   function animate(){if(paused)return;frame=requestAnimationFrame(animate);const t=clock.getElapsedTime();pointer.lerp(target,.025);
-   if(!reduced){const tall=host.clientWidth/Math.max(1,host.clientHeight)<.82;camera.position.x=(tall?0:-2.8)+pointer.x*.38;camera.position.y=(tall?5:4.5)+pointer.y*.18;camera.position.z=tall?20:14;camera.lookAt((tall?0:-2.7)+pointer.x*.18,tall?2.6:2,tall?-3.6:-2);
+   if(!reduced){const tall=host.clientWidth/Math.max(1,host.clientHeight)<.82;camera.position.x=(tall?0:-2.8)+pointer.x*.38;camera.position.y=(tall?5:4.5)+pointer.y*.18;camera.position.z=tall?18:14;camera.lookAt((tall?0:-2.7)+pointer.x*.18,tall?3.35:2,tall?-3.6:-2);
     mist.forEach(m=>{m.position.x+=m.userData.speed*.003;if(m.position.x>10)m.position.x=-10;m.material.opacity=.045+Math.sin(t*.4+m.position.z)*.02;});
     leaves.forEach(l=>{l.position.y-=l.userData.speed*.009;l.position.x+=Math.sin(t+l.userData.phase)*.002;l.rotation.z+=.003;if(l.position.y<-.8){l.position.y=7+Math.random()*2;l.position.x=(Math.random()-.5)*12;}});
     wisps.forEach(w=>{const p=w.userData.phase+t*.24;w.position.set(pointer.x*4+Math.cos(p)*w.userData.radius,2+pointer.y*1.8+Math.sin(p*1.3)*.5,-1-Math.sin(p)*2);});
