@@ -11,15 +11,22 @@ if(canvas&&host){
  let renderer;
  try{
   renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,matchMedia('(max-width: 760px)').matches?1.15:1.5));
   renderer.setSize(host.clientWidth,host.clientHeight,false);
   renderer.outputEncoding=THREE.sRGBEncoding;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
  }catch(error){console.warn('WebGL is unavailable for the Temple Night scene.',error);}
  if(renderer){
   const scene=new THREE.Scene();scene.background=new THREE.Color(0x050911);scene.fog=new THREE.FogExp2(0x0a1725,.045);
-  const camera=new THREE.PerspectiveCamera(42,host.clientWidth/host.clientHeight,.1,100);
-  camera.position.set(0,4.5,14);camera.lookAt(0,2,-2);
+  const camera=new THREE.PerspectiveCamera(42,host.clientWidth/Math.max(1,host.clientHeight),.1,120);
+  function frameCamera(){
+   const aspect=host.clientWidth/Math.max(1,host.clientHeight),tall=aspect<.82;
+   camera.aspect=aspect;camera.fov=tall?72:42;
+   camera.position.set(tall?0:-2.8,tall?5:4.5,tall?20:14);
+   camera.lookAt(tall?0:-2.7,tall?2.6:2,tall?-3.6:-2);
+   camera.updateProjectionMatrix();
+  }
+  frameCamera();
   scene.add(new THREE.HemisphereLight(0x9ac9ed,0x10121b,1.2));
   const moon=new THREE.DirectionalLight(0x91c9ff,2);moon.position.set(-5,10,4);scene.add(moon);
   const material=(color,roughness=.8)=>new THREE.MeshStandardMaterial({color,roughness});
@@ -59,7 +66,7 @@ if(canvas&&host){
   box(10.7,.25,.45,material(0x5b3430),0,4,-.1);box(11.3,.17,.5,material(0x6b4037),0,4.22,-.1);box(8.8,.18,.4,material(0x482b2a),0,3.7,-.1);
   const mist=[];
   for(let i=0;i<7;i++){const m=new THREE.Mesh(new THREE.PlaneGeometry(14+Math.random()*8,1.4),new THREE.MeshBasicMaterial({color:0x83acc8,transparent:true,opacity:.065,depthWrite:false,side:THREE.DoubleSide}));m.position.set((Math.random()-.5)*12,.8+Math.random()*3,-1-Math.random()*14);scene.add(m);m.userData.speed=.1+Math.random()*.2;mist.push(m);}
-  const count=900,positions=new Float32Array(count*6),speeds=new Float32Array(count);
+  const count=innerWidth<760?430:850,positions=new Float32Array(count*6),speeds=new Float32Array(count);
   for(let i=0;i<count;i++){const x=(Math.random()-.5)*25,y=Math.random()*15,z=2-Math.random()*28;positions.set([x,y,z,x-.08,y-.35,z],i*6);speeds[i]=.08+Math.random()*.18;}
   const rainGeometry=new THREE.BufferGeometry();rainGeometry.setAttribute('position',new THREE.BufferAttribute(positions,3));
   scene.add(new THREE.LineSegments(rainGeometry,new THREE.LineBasicMaterial({color:0xa5cbe7,transparent:true,opacity:.34})));
@@ -67,14 +74,16 @@ if(canvas&&host){
   for(let i=0;i<24;i++){const leaf=new THREE.Mesh(new THREE.PlaneGeometry(.09,.16),new THREE.MeshBasicMaterial({color:i%2?0xc17a4b:0x6e9b86,side:THREE.DoubleSide,transparent:true,opacity:.8}));leaf.position.set((Math.random()-.5)*12,Math.random()*8-1,Math.random()*-12);leaf.userData={speed:.25+Math.random()*.4,phase:Math.random()*7};scene.add(leaf);leaves.push(leaf);}
   const target=new THREE.Vector2(),pointer=new THREE.Vector2(),wisps=[];
   for(let i=0;i<28;i++){const w=new THREE.Mesh(new THREE.SphereGeometry(.02,5,5),new THREE.MeshBasicMaterial({color:i%3?0x8bc9e9:0xffbb83,transparent:true,opacity:.42}));w.userData={phase:Math.random()*6.28,radius:.3+Math.random()*1.5};scene.add(w);wisps.push(w);}
-  host.addEventListener('pointermove',e=>{const r=host.getBoundingClientRect();target.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height*2-1));},{passive:true});
-  host.addEventListener('pointerleave',()=>target.set(0,0),{passive:true});
+  window.addEventListener('pointermove',e=>{
+   target.set((e.clientX/Math.max(1,innerWidth))*2-1,-((e.clientY/Math.max(1,innerHeight))*2-1));
+  },{passive:true});
+  window.addEventListener('blur',()=>target.set(0,0),{passive:true});
   let composer=null;try{composer=new EffectComposer(renderer);composer.addPass(new RenderPass(scene,camera));composer.addPass(new UnrealBloomPass(new THREE.Vector2(host.clientWidth,host.clientHeight),.48,.6,.72));}catch(e){console.warn('Bloom fallback enabled',e);}
-  function resize(){const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);if(composer)composer.setSize(w,h);}
+  function resize(){const w=Math.max(1,host.clientWidth),h=Math.max(1,host.clientHeight);frameCamera();renderer.setSize(w,h,false);if(composer)composer.setSize(w,h);}
   addEventListener('resize',resize,{passive:true});new ResizeObserver(resize).observe(host);
   const clock=new THREE.Clock();let frame=0,paused=false;
   function animate(){if(paused)return;frame=requestAnimationFrame(animate);const t=clock.getElapsedTime();pointer.lerp(target,.025);
-   if(!reduced){camera.position.x=pointer.x*.38;camera.position.y=4.5+pointer.y*.18;camera.lookAt(pointer.x*.18,2,-2);
+   if(!reduced){const tall=host.clientWidth/Math.max(1,host.clientHeight)<.82;camera.position.x=(tall?0:-2.8)+pointer.x*.38;camera.position.y=(tall?5:4.5)+pointer.y*.18;camera.position.z=tall?20:14;camera.lookAt((tall?0:-2.7)+pointer.x*.18,tall?2.6:2,tall?-3.6:-2);
     mist.forEach(m=>{m.position.x+=m.userData.speed*.003;if(m.position.x>10)m.position.x=-10;m.material.opacity=.045+Math.sin(t*.4+m.position.z)*.02;});
     leaves.forEach(l=>{l.position.y-=l.userData.speed*.009;l.position.x+=Math.sin(t+l.userData.phase)*.002;l.rotation.z+=.003;if(l.position.y<-.8){l.position.y=7+Math.random()*2;l.position.x=(Math.random()-.5)*12;}});
     wisps.forEach(w=>{const p=w.userData.phase+t*.24;w.position.set(pointer.x*4+Math.cos(p)*w.userData.radius,2+pointer.y*1.8+Math.sin(p*1.3)*.5,-1-Math.sin(p)*2);});
@@ -82,6 +91,13 @@ if(canvas&&host){
    }
    if(composer)composer.render();else renderer.render(scene,camera);
   }
-  document.addEventListener('visibilitychange',()=>{paused=document.hidden;if(!paused)animate();else cancelAnimationFrame(frame);});animate();
+  document.addEventListener('visibilitychange',()=>{
+   paused=document.hidden;
+   if(paused)cancelAnimationFrame(frame);
+   else if(!reduced)animate();
+   else if(composer)composer.render();
+   else renderer.render(scene,camera);
+  });
+  if(reduced){if(composer)composer.render();else renderer.render(scene,camera);}else animate();
  }
 }
