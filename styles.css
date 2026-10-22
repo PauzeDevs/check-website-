@@ -10,3 +10,60 @@
 @media(max-width:900px){.temple-visual{height:430px;width:100%}}
 @media(max-width:620px){.temple-visual{height:350px;border-radius:12px;transform:none}.temple-caption{top:13px;left:13px;right:13px;font-size:7px}.temple-hint{left:13px;bottom:12px;font-size:7px}}
 @media(prefers-reduced-motion:reduce){.temple-hint{display:none}}
+
+
+/* Full-bleed Temple Night background. The homepage remains a readable layer above it. */
+body{isolation:isolate;background:#070a10}
+body:before{z-index:0;opacity:.7;pointer-events:none}
+.ambient{display:none}
+#temple-backdrop{
+  position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 76% 48%,rgba(18,61,91,.38),transparent 52%),
+    radial-gradient(ellipse at 48% 82%,rgba(11,37,57,.36),transparent 50%),
+    #070a10;
+}
+#temple-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#temple-backdrop:after{
+  content:"";position:absolute;inset:0;z-index:1;
+  background:
+    linear-gradient(90deg,rgba(5,8,14,.93) 0%,rgba(5,8,14,.76) 29%,rgba(5,8,14,.25) 66%,rgba(5,8,14,.23) 100%),
+    linear-gradient(180deg,rgba(5,8,14,.52) 0%,rgba(5,8,14,.08) 26%,rgba(5,8,14,.2) 53%,rgba(5,8,14,.77) 82%,#080a0f 100%);
+}
+.nav-shell,main,.footer{position:relative;z-index:2}
+.nav-shell{width:min(1280px,calc(100% - 48px))}
+.hero{
+  min-height:calc(100svh - 78px);grid-template-columns:minmax(0,1fr);align-content:center;
+  gap:0;padding-top:58px;padding-bottom:100px;
+}
+.hero-copy{max-width:670px;position:relative;z-index:1}
+.hero h1{font-size:clamp(66px,8.4vw,112px)}
+.hero-lede{max-width:465px}
+.hero-index{z-index:1}
+.temple-caption{position:absolute;z-index:2;right:28px;bottom:29px;left:auto;top:auto;display:flex;gap:10px;align-items:center;color:rgba(215,229,244,.55);font-size:8px;letter-spacing:.1em}
+.temple-hint{position:absolute;z-index:2;left:28px;bottom:29px;font-size:8px;color:rgba(203,219,237,.48);letter-spacing:.08em}
+.ticker,.principles-section{background-color:rgba(7,10,16,.62);backdrop-filter:blur(6px)}
+.project-card,.about-card{backdrop-filter:blur(10px)}
+.work-section,.about-section,.closing{position:relative;z-index:2}
+@media(max-width:900px){
+  .nav-shell{width:calc(100% - 36px)}
+  .hero{min-height:calc(100svh - 68px);padding-top:45px;padding-bottom:86px;gap:0}
+  .hero h1{font-size:clamp(64px,13vw,94px)}
+}
+@media(max-width:620px){
+  .hero{min-height:calc(100svh - 68px);padding-top:38px;padding-bottom:92px}
+  .hero-copy{max-width:100%}
+  .hero h1{font-size:clamp(60px,15vw,82px)}
+  .hero-lede{max-width:360px}
+  #temple-backdrop:after{
+    background:
+      linear-gradient(180deg,rgba(5,8,14,.84) 0%,rgba(5,8,14,.67) 25%,rgba(5,8,14,.14) 48%,rgba(5,8,14,.36) 68%,rgba(5,8,14,.84) 88%,#080a0f 100%),
+      linear-gradient(90deg,rgba(5,8,14,.33),transparent 72%);
+  }
+  .temple-caption{right:14px;bottom:16px;font-size:7px}
+  .temple-hint{left:14px;bottom:16px;font-size:7px}
+  .hero-footnote{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){
+  #temple-backdrop:after{background:linear-gradient(180deg,rgba(5,8,14,.55),rgba(5,8,14,.2) 35%,#080a0f 100%)}
+}
