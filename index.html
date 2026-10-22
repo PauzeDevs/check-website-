@@ -20,6 +20,11 @@
   </script>
 </head>
 <body>
+  <div id="temple-backdrop" aria-hidden="true">
+    <canvas id="temple-canvas"></canvas>
+    <div class="temple-caption"><span class="mono">SCENE 001 / NIGHT STUDY</span><span class="temple-live"><i></i> THREE.JS WORLD</span></div>
+    <div class="temple-hint mono">RAIN · MIST · A WORLD IN MOTION</div>
+  </div>
   <div class="ambient ambient-a" aria-hidden="true"></div>
   <div class="ambient ambient-b" aria-hidden="true"></div>
   <header class="nav-shell">
@@ -48,12 +53,6 @@
         </div>
         <div class="hero-footnote"><span class="mono">DESIGN × ENGINEERING</span><span class="footnote-rule"></span><span>Curiosity, shipped.</span></div>
       </div>
-      <div class="hero-visual temple-visual" aria-label="Interactive procedural night temple scene">
-        <canvas id="temple-canvas" aria-label="Rainy mountain temple at night, rendered with Three.js"></canvas>
-        <div class="temple-vignette" aria-hidden="true"></div>
-        <div class="temple-caption"><span class="mono">SCENE 001 / NIGHT STUDY</span><span class="temple-live"><i></i> THREE.JS WORLD</span></div>
-        <div class="temple-hint mono">MOVE YOUR POINTER TO DISTURB THE MIST</div>
-      </div>
       <div class="hero-index mono">01 — A PRACTICE, NOT A PITCH</div>
     </section>
 
@@ -80,6 +79,7 @@
     <section class="closing section-wrap reveal"><div class="closing-line"></div><div class="eyebrow">HAVE A LOOK AROUND</div><h2>Good ideas deserve<br><span class="gradient-text">working code.</span></h2><a class="button button-primary" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer">Visit PauzeDevs on GitHub <span aria-hidden="true">↗</span></a><span class="closing-coordinate mono">END / 04</span></section>
   </main>
   <footer class="footer"><a class="brand footer-brand" href="#top"><span class="brand-mark"><span></span><span></span><span></span></span><span>pauze<span class="brand-muted">devs</span></span></a><span class="footer-copy">Independent projects. Intentional engineering.</span><a class="footer-top mono" href="#top">BACK TO TOP ↑</a><span class="footer-copy footer-year">© <span id="year">2026</span> PAUZEDEVS</span></footer>
-  <script src="script.js"></script>\n  <script type="module" src="temple.js"></script>
+  <script src="script.js"></script>
+  <script type="module" src="temple.js"></script>
 </body>
 </html>
