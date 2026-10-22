@@ -1,7 +1,7 @@
-import * as THREE from 'https://esm.sh/three@0.149.0';
-import { EffectComposer } from 'https://esm.sh/three@0.149.0/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'https://esm.sh/three@0.149.0/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'https://esm.sh/three@0.149.0/examples/jsm/postprocessing/UnrealBloomPass.js';
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 
 const canvas=document.querySelector('#temple-canvas');
@@ -13,7 +13,7 @@ if(canvas&&host){
   renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));
   renderer.setSize(host.clientWidth,host.clientHeight,false);
-  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.outputEncoding=THREE.sRGBEncoding;
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
  }catch(error){console.warn('WebGL is unavailable for the Temple Night scene.',error);}
  if(renderer){
