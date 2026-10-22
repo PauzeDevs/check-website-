@@ -40,15 +40,11 @@
         </div>
         <div class="hero-footnote"><span class="mono">DESIGN × ENGINEERING</span><span class="footnote-rule"></span><span>Curiosity, shipped.</span></div>
       </div>
-      <div class="hero-visual reveal" aria-label="Abstract software interface illustration">
-        <div class="visual-grid"></div>
-        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
-        <div class="core-glow"></div>
-        <div class="glass-panel panel-back"><div class="panel-top"><span class="window-dots"><i></i><i></i><i></i></span><span class="mono">SYSTEM / 02</span></div><div class="skeleton wide"></div><div class="skeleton medium"></div><div class="skeleton short"></div><div class="mini-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
-        <div class="glass-panel panel-front"><div class="panel-top"><span class="live-label"><span class="status-dot"></span> PROCESS ACTIVE</span><span class="mono">0xA4</span></div><div class="signal-mark"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="panel-bottom"><div><span class="micro-label">RESPONSE</span><strong>12<span>ms</span></strong></div><div class="metric-divider"></div><div><span class="micro-label">STATUS</span><strong class="healthy">Stable</strong></div></div></div>
-        <div class="floating-chip chip-top"><span class="chip-icon">⌘</span><span><b>Clean systems</b><small>Built to make sense</small></span></div>
-        <div class="floating-chip chip-bottom"><span class="chip-pulse"></span><span><b>Shipping steadily</b><small class="mono">BUILD · TEST · REFINE</small></span></div>
-        <span class="visual-coord mono">26° / PZ—01</span>
+      <div class="hero-visual temple-visual" aria-label="Interactive procedural night temple scene">
+        <canvas id="temple-canvas" aria-label="Rainy mountain temple at night, rendered with Three.js"></canvas>
+        <div class="temple-vignette" aria-hidden="true"></div>
+        <div class="temple-caption"><span class="mono">SCENE 001 / NIGHT STUDY</span><span class="temple-live"><i></i> THREE.JS WORLD</span></div>
+        <div class="temple-hint mono">MOVE YOUR POINTER TO DISTURB THE MIST</div>
       </div>
       <div class="hero-index mono">01 — A PRACTICE, NOT A PITCH</div>
     </section>
@@ -76,6 +72,6 @@
     <section class="closing section-wrap reveal"><div class="closing-line"></div><div class="eyebrow">HAVE A LOOK AROUND</div><h2>Good ideas deserve<br><span class="gradient-text">working code.</span></h2><a class="button button-primary" href="https://github.com/PauzeDevs" target="_blank" rel="noreferrer">Visit PauzeDevs on GitHub <span aria-hidden="true">↗</span></a><span class="closing-coordinate mono">END / 04</span></section>
   </main>
   <footer class="footer"><a class="brand footer-brand" href="#top"><span class="brand-mark"><span></span><span></span><span></span></span><span>pauze<span class="brand-muted">devs</span></span></a><span class="footer-copy">Independent projects. Intentional engineering.</span><a class="footer-top mono" href="#top">BACK TO TOP ↑</a><span class="footer-copy footer-year">© <span id="year">2026</span> PAUZEDEVS</span></footer>
-  <script src="script.js"></script>
+  <script src="script.js"></script>\n  <script type="module" src="temple.js"></script>
 </body>
 </html>
